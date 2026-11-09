@@ -79,3 +79,33 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: python3 .github/scripts/report-broken-links.py "$RUNNER_TEMP/links.json"
+
+  # Keeps the site within the size limit of GitHub Pages
+  prune-previews:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+        sparse-checkout: .github/scripts
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: gh-pages
+        path: _gh-pages
+        persist-credentials: true # the deploy script pushes to gh-pages
+    - name: Remove stale previews
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        python3 .github/scripts/stale-previews.py _gh-pages "$RUNNER_TEMP/open-prs.txt" >"$RUNNER_TEMP/remove.txt"
+        .github/scripts/deploy-gh-pages.sh _gh-pages - "Remove stale previews" <"$RUNNER_TEMP/remove.txt"
+        while read -r PR; do
+            # The preview is kept if it was deployed again in the meantime
+            [[ -e _gh-pages/pr-preview/pr-$PR ]] && continue
+            PR=$PR .github/scripts/pr-comment.sh update previews "**Previews:** removed after 90 days without new commits. Push a commit, or ask a maintainer to re-run the latest on-pull-request workflow, to get them back."
+        done <"$RUNNER_TEMP/open-prs.txt"

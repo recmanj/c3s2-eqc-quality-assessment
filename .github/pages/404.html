@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found</title>
+  <script>
+    // The site no longer publishes copies of the notebooks in _sources/, so links to
+    // them go to the notebook on GitHub, e.g. owner.github.io/repo/_sources/a/b.ipynb
+    // or owner.github.io/repo/pr-preview/pr-1/_sources/a/b.ipynb
+    var match = location.pathname.match(/^\/([^/]+)\/(?:pr-preview\/pr-\d+\/)?_sources\/(.+)$/);
+    if (match) {
+      var owner = location.hostname.split(".")[0];
+      location.replace("https://github.com/" + owner + "/" + match[1] + "/blob/main/" + match[2]);
+    }
+  </script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 4rem 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Page not found</h1>
+  <p><a href="/c3s2-eqc-quality-assessment/">Go to the home page</a></p>
+</body>
+</html>

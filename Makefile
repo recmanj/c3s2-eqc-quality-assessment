@@ -27,5 +27,8 @@ pre-build-book: clean-book ## Prepare temporary files and run pre-build script
 	tmpdir=$$(mktemp -d) && cp -r * "$$tmpdir" && rm -fr "$$tmpdir/$(UNWANTED_DIR)" && mv "$$tmpdir" $(PRE_BUILD_DIR)
 	uv run --group book python scripts/pre-build.py $(PRE_BUILD_DIR) $(PRE_BUILD_FLAGS)
 
+# Source maps are only for debugging and browsers use the .woff2 fonts, so the theme's
+# .map and .ttf files are dropped to keep the site within the size limit of GitHub Pages
 build-book: pre-build-book ## Build the Jupyter Book
 	uv run --group book jupyter-book build -W -n --keep-going $(PRE_BUILD_DIR)
+	find $(PRE_BUILD_DIR)/_build/html/_static \( -name '*.map' -o -name '*.ttf' \) -delete
