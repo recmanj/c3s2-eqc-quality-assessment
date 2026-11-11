@@ -16,6 +16,9 @@ To run the quality assurance checks:
 make qa
 ```
 
+This checks every file, and additionally runs the stricter template, link, DOI and filename checks on the notebooks you changed relative to `origin/main` (commit them first).
+The checks on notebooks are described in the [template instructions](templates/template_instructions.md#automatic-checks).
+
 To build the book:
 
 ```bash
