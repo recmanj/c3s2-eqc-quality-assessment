@@ -45,11 +45,21 @@ select = [
   "D"
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Notebooks keep imports next to the code that uses them, in any order (E402, I001),
+# end a cell with a semicolon to hide its output (E703), and need no docstrings (D).
+# Line length and whitespace are left to the formatter (E501, W291, W293).
+"*.ipynb" = ["D", "E402", "E501", "E703", "I001", "W291", "W293"]
+
 [tool.ruff.lint.pycodestyle]
 max-line-length = 110
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.lint.pyflakes]
+# Imported for their side effects: they register xarray accessors such as .rio and .cf
+allowed-unused-imports = ["cf_xarray", "rioxarray"]
 
 [tool.uv]
 package = false
