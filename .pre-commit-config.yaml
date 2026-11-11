@@ -52,6 +52,22 @@ repos:
     language: python
     types: [jupyter]
     additional_dependencies: [nbformat]
+# The strict hooks check rules that not every existing notebook follows yet, so they are
+# in the manual stage: pull requests and `make qa` check the notebooks they change, the
+# weekly workflow and `make qa-all` check all of them. When every notebook passes a
+# rule, move it out of --strict; when none are left, delete the strict hook.
+- repo: local
+  hooks:
+  - id: validate-headings-strict
+    name: validate headings (strict)
+    entry: python scripts/validate-headings.py
+    args: [--strict]
+    language: python
+    types: [jupyter]
+    exclude: ^templates/
+    additional_dependencies: [nbformat]
+    require_serial: true # compares titles with every notebook
+    stages: [manual]
 - repo: local
   hooks:
   - id: validate-references
@@ -60,6 +76,34 @@ repos:
     language: python
     types: [jupyter]
     additional_dependencies: [nbformat]
+- repo: local
+  hooks:
+  - id: validate-references-strict
+    name: validate references (strict)
+    entry: python scripts/validate-references.py
+    args: [--strict]
+    language: python
+    types: [jupyter]
+    additional_dependencies: [nbformat]
+    stages: [manual]
+- repo: local
+  hooks:
+  - id: validate-content
+    name: validate content
+    entry: python scripts/validate-content.py
+    language: python
+    types: [jupyter]
+    exclude: ^templates/
+    additional_dependencies: [nbformat]
+- repo: local
+  hooks:
+  - id: validate-figures
+    name: validate figures
+    entry: python scripts/validate-figures.py
+    language: python
+    types: [jupyter]
+    additional_dependencies: [nbformat]
+    stages: [manual]
 - repo: https://github.com/executablebooks/mdformat
   rev: 1.0.0
   hooks:
