@@ -16,11 +16,43 @@ Some additional formatting required for the Jupyter Book will be automatically a
 Please follow the headings and subheadings approach used in the template. The level of the heading is determined by the number of hashes before it (#Title, ##Use case, etc.). The following link should be helpful: https://jupyterbook.org/en/stable/reference/cheatsheet.html
 
 Also note that icons have been added to most of the headings. These are standardised so should be the same for each assessment.
+
+Keep the six main sections in the order of the template, and do not skip heading levels (for example, do not go from `##` straight to `####`). The title and the main section headings cannot start with a number; lower-level headings can (`### 1. ...`).
 ```
 
 ```{note}
-**References in the text should be made in the format`[[1]](https://doi.org/10.1038/s41598-018-20628-2))`, using a doi link wherever possible. The links are checked when the book is built, and broken links will cause an error to be raised.**
+**References in the text should be made in the format `[[1]](https://doi.org/10.1038/s41598-018-20628-2)`, using a doi link wherever possible. The links are checked when the book is built, and broken links will cause an error to be raised.**
 ```
+
+## Automatic checks
+
+The template is enforced by automatic checks, which run on every pull request. To run them yourself, use `make qa`, or for a single notebook:
+
+```bash
+uv run pre-commit run --hook-stage manual --files path/to/notebook.ipynb
+```
+
+Checked on every notebook:
+
+- the title is the first line and the only level one heading;
+- the six main sections appear exactly once each, in the order of the template, with no other level two headings;
+- no heading levels are skipped;
+- the title and the main section headings do not start with a number;
+- the quality assessment statement uses the admonition from the template;
+- every `###` heading under 'Analysis and results' has a label that is linked from the methodology;
+- each reference number always links to the same URL;
+- no placeholder text or example image from the template is left in;
+- no code cell is saved with an error in its output.
+
+Checked on the notebooks that a pull request adds or changes:
+
+- the production date line;
+- the question is written as bold bullet points;
+- the title is not used by another notebook;
+- every `{figure}` has a caption, and sets either its height or its width, not both;
+- every numbered reference cited in the text is listed under 'References'.
+
+Not checked automatically: the length of the title and whether a key figure is included.
 
 ## Assessment title (no icons)
 
@@ -33,7 +65,7 @@ It could include:
 - **Application area**: impact models, risk assessment, climate monitoring, scientific study of X, Y sector, 'region', 'specific C3S application', flood forecasting, etc.
 
 ```{note}
-The title will be used in the table of contents for the data stream and the side bar of the Jupyter Book, so it needs to be unique, not too long, and help guide users to the assessment by mentioning the key analysis or outcomes. It will also be the title shown in the quality tab on the CDS.
+The title will be used in the table of contents for the data stream and the side bar of the Jupyter Book, so it needs to be unique (ignoring upper and lower case), not too long, and help guide users to the assessment by mentioning the key analysis or outcomes. It will also be the title shown in the quality tab on the CDS.
 ```
 
 ```{note}
@@ -42,7 +74,15 @@ The title should be the only 'level one' heading (single # before the heading), 
 
 ## Production date and author
 
-Include a production date (approximating when the data was downloaded and code first run, or document first accessed).
+Include a production date (approximating when the data was downloaded and code first run, or document first accessed). It is the first line after the title, with the date written as day-month-year:
+
+```md
+Production date: 31-05-2024
+```
+
+If the notebook is revised later, add the date of the update: `Production date: 31-05-2024 (updated 15-01-2025)`.
+
+Optionally, add the version of the dataset on the next line, like `Dataset version: 2.0.`
 
 The author(s) of individual notebooks are no longer credited in the notebooks themselves,
 but in a [shared credits page](../credits.md).
@@ -52,9 +92,9 @@ Please feel free to add new or missing authors and affiliations to said page.
 
 The use case is listed directly in the heading of the section: `## Use case: ...`
 
-## ❓ User question
+## ❓ Quality assessment question
 
-User question, or User questions, if more than one question is answered in the assessment, or if a second question helps clarify the aim of the assessment. The question or questions are bold and highlighted with bullet points.
+The quality assessment question, or questions, if more than one question is answered in the assessment, or if a second question helps clarify the aim of the assessment. The question or questions are bold and highlighted with bullet points, like `* **How well does ...?**`
 
 ## Context text (no heading or icon)
 
@@ -62,7 +102,7 @@ A section of text with no heading which appears after the user question and befo
 
 ## 📢 Quality assessment statement
 
-Key results and guidance including an answer to the user question, as a bulleted list.
+Key results and guidance including an answer to the user question, as a bulleted list inside the admonition from the template (```` ```{admonition} These are the key outcomes of this assessment ```` followed by `:class: note`).
 
 ```{note}
 The blue notification box that contains the quality assessment statement bullet points will not appear in GitHub, but will be rendered when the Jupyter Book page is created.
@@ -74,7 +114,7 @@ A key figure should be included if possible, acting as a 'graphical abstract' fo
 
 Drag and drop the image from a file browser into the cell. If the image file already includes a figure number and the caption then the simple default syntax can be used to add the figure (`![](attachment:... ID from drag and drop)`). Otherwise, figure formatting can be used (see the template), where the attachment code from the drag and drop needs to be wrapped in the figure syntax. This approach should also be followed if images not generated by code are included later in the assessment.
 
-The figure should always include an explanatory caption and/or title.
+The figure should always include an explanatory caption and/or title. With the figure formatting, write the caption inside the figure block, after the options. Set either the height or the width of the figure, not both.
 
 ```{note}
 The figure formatting will not render in Github, but will work when the Jupyter Book page is built. Also note that the figure numbering is automatic, and applied across the whole Book (each Notebook does not start at 1 - this may be changed in the future). 
@@ -93,10 +133,12 @@ The syntax for the link in the methodology list is: `[](section-1)`, where no te
 
 ## 📈 Analysis and results
 
-A series of subsections with the same titles as in the listen in the methodology. In turn, these can have their own subsections. Code cells will be collapsed when the Jupyter Book is built. The final results should be clearly presented and discussed, supporting (but not repeating), the quality assessment statement.
+A series of subsections with the same titles as in the listen in the methodology. In turn, these can have their own subsections. Code cells will be collapsed when the Jupyter Book is built. The final results should be clearly presented and discussed, supporting (but not repeating), the quality assessment statement. Do not save the notebook with an error in the output of a code cell: fix the error and re-run the notebook, or clear that output.
 
 ## ℹ️ If you want to know more
 
 Including a key resources subsection, which can link to suggested further reading, code packages used, and the relevant CDS catalogue entries. Try to link to relevant applications of the data, such as the C3S Climate Atlas, for projections, or the relevant parts of the European State of the Climate report for some ECVs.
 
-Including a references subsection, which is a numbered list of the references used throughout the text. However, the references in the text should link to the external source, rather than the references list at the bottom of the assessment.
+Including a references subsection, which is a numbered list of the references used throughout the text. However, the references in the text should link to the external source, rather than the references list at the bottom of the assessment. Every numbered reference cited in the text must be in the list, written as `[[1]](https://doi.org/...) Authors (year). Title.`
+
+Before submitting, delete all placeholder text, example images and '(Delete this cell)' cells that come from the template.
