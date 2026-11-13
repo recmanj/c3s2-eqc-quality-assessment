@@ -168,7 +168,7 @@ jobs:
         HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         CHANGED_FILES: ${{ needs.changed-files.outputs.files }}
         # Read the Docs builds the preview of each pull request; see .readthedocs.yaml
-        PREVIEW_URL: https://c3s2-eqc-quality-assessment--${{ github.event.number }}.org.readthedocs.build/en/${{ github.event.number }}
+        PREVIEW_URL: https://recmanj-eqc-trial--${{ github.event.number }}.org.readthedocs.build/en/${{ github.event.number }}
       run: |
         permalinks="<ul>"
         previews="<ul>"
