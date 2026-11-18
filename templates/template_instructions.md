@@ -74,13 +74,13 @@ The title should be the only 'level one' heading (single # before the heading), 
 
 ## Production date and author
 
-Include a production date (approximating when the data was downloaded and code first run, or document first accessed). It is the first line after the title, with the date written as day-month-year:
+Include a production date (approximating when the data was downloaded and code first run, or document first accessed). It is the first line after the title, with the date written as year-month-day (ISO 8601):
 
 ```md
-Production date: 31-05-2024
+Production date: 2024-05-31.
 ```
 
-If the notebook is revised later, add the date of the update: `Production date: 31-05-2024 (updated 15-01-2025)`.
+If the notebook is revised later, add the date of the update: `Production date: 2024-05-31 (updated 2025-01-15).`.
 
 Optionally, add the version of the dataset on the next line, like `Dataset version: 2.0.`
 

@@ -15,6 +15,7 @@ PLACEHOLDERS = (
     "(no title/heading)",
     "Here is my figure caption",
     "Production date: DD-MM-YYYY",
+    "Production date: YYYY-MM-DD",
     "Describe what is done in this step/section",
     "List some key resources related to this assessment",
     "List the references used in the Notebook here",

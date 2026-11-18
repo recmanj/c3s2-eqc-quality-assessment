@@ -20,8 +20,8 @@ HEADINGS = (
 
 ADMONITION_TITLE = "These are the key outcomes of this assessment"
 
-DATE = r"\d{2}-\d{2}-\d{4}"
-PRODUCTION_DATE = rf"Production date: ({DATE})(?: \(updated ({DATE})\))?"
+DATE = r"\d{4}-\d{2}-\d{2}"
+PRODUCTION_DATE = rf"Production date: ({DATE})(?: \([Uu]pdated ({DATE})\))?\.?"
 BOLD_BULLET = r"(?:[*+-]|\d+[.)])\s+(?:\*\*|__)\S"
 
 Rule = Callable[[Path, Any], None]
@@ -124,8 +124,8 @@ def normalise_title(title: str) -> str:
 def validate_production_date(path: Path, notebook: Any) -> None:
     expected = (
         f"{path=!s}: The first line after the title must be "
-        "'Production date: DD-MM-YYYY', optionally followed by "
-        "' (updated DD-MM-YYYY)'"
+        "'Production date: YYYY-MM-DD.', optionally with "
+        "' (updated YYYY-MM-DD)' before the full stop"
     )
     after_title = False
     found = None
@@ -143,7 +143,7 @@ def validate_production_date(path: Path, notebook: Any) -> None:
     assert match, f"{expected}; found {found!r}"
     try:
         produced, updated = (
-            datetime.datetime.strptime(date, "%d-%m-%Y") if date else None
+            datetime.datetime.strptime(date, "%Y-%m-%d") if date else None
             for date in match.groups()
         )
     except ValueError:
